@@ -24,6 +24,19 @@ public class BinarySearchTree {
         integerBST.preOrderTraversal();
         System.out.println();
         integerBST.postOrderTraversal();
+        System.out.println();
+
+        System.out.println("Minimum: " + integerBST.getMin() + " : " + new BST<>().getMin());
+        System.out.println("Kth Smallest: "); // + integerBST.kthSmallest(2) + " : " + integerBST.kthSmallest(7));
+        integerBST.kthSmallest(2);
+        System.out.println();
+
+        System.out.println("\nIsBinary: " + integerBST.isBinary());
+//        integerBST.root.right = new Node<>(1);
+//        System.out.println("\nIsBinary: " + integerBST.isBinary());
+        integerBST.root.left.right = new Node<>(52);
+        System.out.println("\nIsBinary: " + integerBST.isBinary());
+
     }
 
 }
@@ -139,6 +152,75 @@ class BST<T extends Comparable> {
         }
 
         return 1 + Math.max(getHeight(node.left), getHeight(node.right));
+    }
+
+    public boolean isBinary() {
+//        return isBinary((Node<Integer>) root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        return isB(root, null, null);
+    }
+
+    private boolean isBinary(Node<Integer> node, Integer min, Integer max) {
+        System.out.print(node == null ? "NULL " : node.data + " ");
+
+        if (node == null) {
+            return true;
+        }
+
+        if (node.data < min || node.data > max) {
+            return false;
+        }
+
+        return (isBinary(node.left, min, node.data - 1) && isBinary(node.right, node.data + 1, max));
+    }
+
+    private boolean isB(Node<T> node, Node<T> left, Node<T> right) {
+        if (node == null) {
+            return true;
+        }
+
+        if (left != null && node.data.compareTo(left.data) < 0) {
+            return false;
+        }
+
+        if (right != null && node.data.compareTo(right.data) > 0) {
+            return false;
+        }
+
+        return isB(node.left, left, node) && isB(node.right, node, right);
+    }
+
+    public T getMin() {
+        return getMin(root);
+    }
+
+    private T getMin(Node<T> node) {
+        if (node == null) {
+            return null;
+        }
+
+        if (node.left == null) {
+            return node.data;
+        } else {
+            return getMin(node.left);
+        }
+    }
+
+    // TODO: Incomplete
+    public void kthSmallest(int k) {
+        kthSmallest(root, k, 0);
+    }
+
+    private void kthSmallest(Node<T> node, int k, int i) {
+        if (node == null) {
+            return;
+        }
+
+        kthSmallest(node.left, k, i);
+        i++;
+        if (k == i) {
+            System.out.print(node.data + " ");
+        }
+        kthSmallest(node.right, k, i);
     }
 }
 
