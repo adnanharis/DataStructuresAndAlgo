@@ -41,7 +41,7 @@ public class BinarySearchTree {
 
 }
 
-class Node<T extends Comparable> {
+class Node<T extends Comparable<T>> {
     T data;
     Node<T> left;
     Node<T> right;
@@ -58,7 +58,7 @@ class Node<T extends Comparable> {
     }
 }
 
-class BST<T extends Comparable> {
+class BST<T extends Comparable<T>> {
     Node<T> root;
 
     public boolean isEmpty() {
