@@ -1,7 +1,6 @@
 package com.adnan;
 
-import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.*;
 
 public class Testbed {
 
@@ -20,6 +19,10 @@ public class Testbed {
 
         Hashtable h;
         HashMap m;
+        List l;
+        Object o = new Object();
+        Stack<Integer> s = new Stack<>();
+        Queue<Integer> q; // = new Queue<Integer>(); // Cannot create the object of queue bc its an interface
     }
 
     static class Student {
