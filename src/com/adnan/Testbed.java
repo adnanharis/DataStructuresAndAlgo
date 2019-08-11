@@ -16,6 +16,7 @@ public class Testbed {
         System.out.println(new Student() + " : " + new Student[5]);
         System.out.println(new Teacher() + " : " + new Teacher[5][5]);
 
+        System.out.println("Hash:" + new String("AaAaAaAa").hashCode() + " : " + new String("AaAaAaBB").hashCode());
 
         Hashtable h;
         HashMap m;
@@ -23,6 +24,9 @@ public class Testbed {
         Object o = new Object();
         Stack<Integer> s = new Stack<>();
         Queue<Integer> q; // = new Queue<Integer>(); // Cannot create the object of queue bc its an interface
+        Queue<Integer> dq = new ArrayDeque();
+        dq.add(1);
+        dq.poll();
     }
 
     static class Student {
