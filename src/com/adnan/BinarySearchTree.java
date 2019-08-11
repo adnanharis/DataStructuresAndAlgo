@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class BinarySearchTree {
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         // int[] arr = new int[1000];
         int[] arr = new int[]{50, 100, 25, 75, 125, 11, 15, 5, 7, 3, 80, 71, 55, 110, 22, 45, 88, 44, 73};
         BST<Integer> integerBST = new BST<>();
@@ -13,8 +13,9 @@ public class BinarySearchTree {
             integerBST.insert(a); // randomGenerator.nextInt(1000)
         }
 
-        int x = 2;
-        int y = 11;
+        int x = 11;
+        int y = 51;
+        int z = 43;
         System.out.println("Element: " + x + " found: " + integerBST.find(x));
         System.out.println("Element: " + y + " found: " + integerBST.find(y));
         System.out.println("Height: " + integerBST.getHeight());
@@ -27,15 +28,25 @@ public class BinarySearchTree {
         System.out.println();
 
         System.out.println("Minimum: " + integerBST.getMin() + " : " + new BST<>().getMin());
+
+        System.out.println("Floor: " + integerBST.floor(x) + " : " + integerBST.floor(y));
+        System.out.println("Floor: " + integerBST.floorWithMin(x) + " : " + integerBST.floorWithMin(y));
+
+        System.out.println("Ceil: " + integerBST.ceil(x) + " : " + integerBST.ceil(z));
+
+        System.out.println("Size: " + integerBST.size());
+
+        System.out.println("Rank: " + integerBST.rank(x) + " : Root rank: " + integerBST.rank(50));
+        // ----------------------------
         System.out.println("Kth Smallest: "); // + integerBST.kthSmallest(2) + " : " + integerBST.kthSmallest(7));
         integerBST.kthSmallest(2);
         System.out.println();
 
-        System.out.println("\nIsBinary: " + integerBST.isBinary());
+        System.out.println("IsBinary: " + integerBST.isBinary());
 //        integerBST.root.right = new Node<>(1);
 //        System.out.println("\nIsBinary: " + integerBST.isBinary());
         integerBST.root.left.right = new Node<>(52);
-        System.out.println("\nIsBinary: " + integerBST.isBinary());
+        System.out.println("IsBinary: " + integerBST.isBinary());
 
     }
 
@@ -45,6 +56,7 @@ class Node<T extends Comparable<T>> {
     T data;
     Node<T> left;
     Node<T> right;
+    int count; // 1 + size of left and right children
 
     public Node(T data) {
         this.data = data;
@@ -79,7 +91,21 @@ class BST<T extends Comparable<T>> {
             node.right = insert(node.right, data);
         }
 
+        node.count = 1 + size(node.left) + size(node.right);
         return node;
+    }
+
+    // Size of BST
+    public int size() {
+        return size(root);
+    }
+
+    public int size(Node<T> node) {
+        if (node == null) {
+            return 0;
+        }
+
+        return node.count;
     }
 
     public boolean find(T data) {
@@ -110,7 +136,7 @@ class BST<T extends Comparable<T>> {
         }
 
         inOrderTraversal(node.left);
-        System.out.print(node.data + " ");
+        System.out.print(node.data + " "); // We can use queue to put elements and return instead of printing directly
         inOrderTraversal(node.right);
     }
 
@@ -190,18 +216,136 @@ class BST<T extends Comparable<T>> {
     }
 
     public T getMin() {
-        return getMin(root);
+        Node<T> x = getMin(root);
+        if (x == null) {
+            return null;
+        } else {
+            return x.data;
+        }
     }
 
-    private T getMin(Node<T> node) {
+    private Node<T> getMin(Node<T> node) {
         if (node == null) {
             return null;
         }
 
         if (node.left == null) {
-            return node.data;
+            return node;
         } else {
             return getMin(node.left);
+        }
+    }
+
+    public T floor(T k) {
+        Node<T> x = floor(root, k);
+        if (x == null) {
+            return null;
+        } else {
+            return x.data;
+        }
+    }
+
+    private Node<T> floor(Node<T> node, T k) {
+        if (node == null) {
+            return null;
+        }
+
+        int cmp = k.compareTo(node.data);
+        if (cmp == 0) {
+            return node;
+        }
+
+        if (cmp < 0) {
+            return floor(node.left, k);
+        } else {
+            Node t = floor(node.right, k);
+            if (t == null) {
+                return node;
+            } else {
+                return t;
+            }
+        }
+    }
+
+    public T floorWithMin(T k) {
+        Node<T> x = floorWithMin(root, k);
+        if (x == null) {
+            return null;
+        } else {
+            return x.data;
+        }
+    }
+
+    private Node<T> floorWithMin(Node<T> node, T k) {
+        if (node == null) {
+            return null;
+        }
+
+        int cmp = k.compareTo(node.data);
+        if (cmp == 0) {
+            return node;
+        }
+
+        if (cmp < 0) {
+            return floor(node.left, k);
+        } else {
+            Node<T> t = getMin(node.right);
+            if (t == null || t.data.compareTo(k) > 0) {
+                return node;
+            } else {
+                return t;
+            }
+        }
+    }
+
+    public T ceil(T k) {
+        Node<T> x = ceil(root, k);
+        if (x == null) {
+            return null;
+        } else {
+            return x.data;
+        }
+    }
+
+    private Node<T> ceil(Node<T> node, T k) {
+        if (node == null) {
+            return null;
+        }
+
+        int cmp = k.compareTo(node.data);
+        if (cmp == 0) {
+            return node;
+        }
+
+        if (cmp > 0) {
+            return ceil(node.right, k);
+        } else {
+            Node<T> t = ceil(node.left, k);
+            if (t == null) {
+                return node;
+            } else {
+                return t;
+            }
+        }
+    }
+
+    // Number of keys less than k
+    public int rank(T k) {
+        return rank(root, k);
+    }
+
+    private int rank(Node<T> node, T k) {
+        if (node == null) {
+            return 0;
+        }
+
+        int cmp = k.compareTo(node.data);
+        if (cmp < 0) {
+            return rank(node.left, k);
+        } else if (cmp > 0) {
+            return 1 + size(node.left) + rank(node.right, k);
+        } else {
+            return size(node.left);
         }
     }
 
