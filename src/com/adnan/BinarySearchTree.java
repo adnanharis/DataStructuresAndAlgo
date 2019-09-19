@@ -173,10 +173,14 @@ class BST<T extends Comparable<T>> {
     }
 
     private int getHeight(Node<T> node) {
-        if (node == null || (node.left == null && node.right == null)) {
+        if (node == null) {
             return 0;
         }
 
+        // if (node.left == null && node.right == null) {
+        //     return 1;
+        // }
+        
         return 1 + Math.max(getHeight(node.left), getHeight(node.right));
     }
 
