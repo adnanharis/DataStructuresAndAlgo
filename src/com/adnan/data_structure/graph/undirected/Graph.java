@@ -9,7 +9,7 @@ public class Graph {
 
     public Graph(int v) {
         this.V = v;
-        bag = new ArrayList[V];
+        bag = (List<Integer>[]) new ArrayList[V];
         for (int i = 0; i < V; i++) {
             bag[i] = new ArrayList<>();
         }
